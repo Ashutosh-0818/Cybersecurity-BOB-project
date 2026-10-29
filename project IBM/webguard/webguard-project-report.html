@@ -1,0 +1,398 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WebGuard — Project Report</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .page { max-width: 820px; margin: 0 auto; padding: 48px 32px 64px; }
+
+  /* Cover */
+  .cover {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 16px;
+    padding: 48px 40px;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  .cover .icon { font-size: 52px; margin-bottom: 12px; }
+  .cover h1 { font-size: 2.2rem; font-weight: 800; color: #58a6ff; margin-bottom: 6px; }
+  .cover .subtitle { color: #8b949e; font-size: 15px; margin-bottom: 24px; }
+  .cover-meta {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+    margin-top: 20px;
+  }
+  .badge {
+    background: #0d1117; border: 1px solid #30363d;
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; color: #8b949e;
+  }
+  .badge span { color: #58a6ff; font-weight: 600; }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  .section-header {
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid #30363d;
+    padding-bottom: 10px; margin-bottom: 20px;
+  }
+  .section-num {
+    background: #58a6ff; color: #0d1117;
+    font-weight: 800; font-size: 13px;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-header h2 { font-size: 1.15rem; font-weight: 700; color: #e6edf3; }
+  p { color: #c9d1d9; margin-bottom: 10px; }
+
+  /* Cards row */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 8px; }
+  .card {
+    background: #161b22; border: 1px solid #30363d;
+    border-radius: 10px; padding: 16px;
+    text-align: center;
+  }
+  .card .val { font-size: 1.6rem; font-weight: 800; color: #58a6ff; }
+  .card .lbl { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: .05em; margin-top: 4px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 13px; }
+  th {
+    background: #161b22; color: #8b949e;
+    padding: 9px 12px; text-align: left;
+    border-bottom: 1px solid #30363d;
+    text-transform: uppercase; letter-spacing: .05em; font-size: 11px;
+  }
+  td { padding: 9px 12px; border-bottom: 1px solid #21262d; color: #e6edf3; }
+  tr:last-child td { border-bottom: none; }
+  .high   { color: #f85149; font-weight: 700; }
+  .medium { color: #d29922; font-weight: 700; }
+  .low    { color: #3fb950; font-weight: 700; }
+
+  /* Check result rows */
+  .check-pass { background: #122d22; border-left: 3px solid #3fb950; border-radius: 0 6px 6px 0; padding: 10px 14px; margin-bottom: 6px; font-size: 13px; }
+  .check-fail { background: #2d1b1b; border-left: 3px solid #f85149; border-radius: 0 6px 6px 0; padding: 10px 14px; margin-bottom: 6px; font-size: 13px; }
+  .check-warn { background: #2b2106; border-left: 3px solid #d29922; border-radius: 0 6px 6px 0; padding: 10px 14px; margin-bottom: 6px; font-size: 13px; }
+  .check-info { background: #0d2044; border-left: 3px solid #58a6ff; border-radius: 0 6px 6px 0; padding: 10px 14px; margin-bottom: 6px; font-size: 13px; }
+  .check-label { font-weight: 700; }
+  .check-detail { color: #8b949e; font-size: 12px; margin-top: 2px; }
+
+  /* Score bar */
+  .score-wrap { margin: 16px 0; }
+  .score-bar-bg { background: #161b22; border-radius: 8px; height: 22px; border: 1px solid #30363d; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 8px; }
+  .score-label { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
+
+  /* Code block */
+  pre {
+    background: #161b22; border: 1px solid #30363d;
+    border-radius: 8px; padding: 14px 16px;
+    font-size: 12px; color: #79c0ff;
+    overflow-x: auto; margin-bottom: 10px;
+    font-family: "Cascadia Code", "Fira Code", monospace;
+  }
+
+  /* Tech pills */
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .pill {
+    background: #161b22; border: 1px solid #30363d;
+    border-radius: 6px; padding: 5px 12px;
+    font-size: 12px; color: #58a6ff;
+  }
+
+  /* Objectives list */
+  ul { padding-left: 20px; color: #c9d1d9; }
+  ul li { margin-bottom: 5px; }
+
+  /* Future improvements */
+  .future-item {
+    background: #161b22; border: 1px solid #30363d;
+    border-radius: 8px; padding: 10px 14px;
+    margin-bottom: 8px; font-size: 13px; color: #c9d1d9;
+  }
+  .future-item::before { content: "→ "; color: #58a6ff; font-weight: 700; }
+
+  /* Footer */
+  .footer {
+    border-top: 1px solid #30363d;
+    padding-top: 20px; margin-top: 48px;
+    text-align: center; color: #57606a; font-size: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  
+  <div class="cover">
+    <div class="icon">🔍</div>
+    <h1>WebGuard</h1>
+    <div class="subtitle">Automated Web Security Header Scanner</div>
+    <p style="color:#8b949e;max-width:520px;margin:0 auto;font-size:14px">
+      A Python &amp; Streamlit tool that audits websites for missing security headers,
+      CORS misconfigurations, cookie flaws, HTTPS enforcement, and server info leaks.
+    </p>
+    <div class="cover-meta">
+      <div class="badge">Language: <span>Python 3</span></div>
+      <div class="badge">Framework: <span>Streamlit 1.66.1</span></div>
+      <div class="badge">Checks: <span>11 Security Checks</span></div>
+      <div class="badge">Type: <span>Educational Project</span></div>
+      <div class="badge">File: <span>app.py (single file)</span></div>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>Overview</h2>
+    </div>
+    <p>
+      WebGuard is a Python-based web security scanner that audits any public website for
+      common HTTP security misconfigurations. It checks response headers, CORS settings,
+      cookie flags, HTTPS enforcement, and server information leaks — then produces a
+      scored report with colour-coded results and actionable recommendations.
+    </p>
+    <p>
+      The entire application runs in a <strong style="color:#58a6ff">single file (app.py)</strong>
+      using only Python built-in libraries and Streamlit. No pandas, no numpy,
+      no machine learning, and no external API keys are required.
+    </p>
+    <div class="cards">
+      <div class="card"><div class="val">11</div><div class="lbl">Security Checks</div></div>
+      <div class="card"><div class="val">1</div><div class="lbl">Python File</div></div>
+      <div class="card"><div class="val">0</div><div class="lbl">External APIs</div></div>
+      <div class="card"><div class="val">100</div><div class="lbl">Max Score</div></div>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Objectives</h2>
+    </div>
+    <ul>
+      <li>Build a working web security auditing tool using only Python standard libraries</li>
+      <li>Check for 11 real-world security issues across HTTP headers, CORS, cookies, and HTTPS</li>
+      <li>Display results with clear ✅ PASS / ❌ FAIL / ⚠️ WARN / ℹ️ INFO indicators</li>
+      <li>Calculate and display a 0–100 security score with a visual progress bar</li>
+      <li>Provide human-readable explanations and recommendations for every failed check</li>
+      <li>Use a clean dark-theme dashboard suitable for a cybersecurity tool</li>
+    </ul>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>Tools &amp; Technologies</h2>
+    </div>
+    <table>
+      <thead><tr><th>Tool</th><th>Version</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Python</td><td>3.8+</td><td>Core programming language</td></tr>
+        <tr><td>Streamlit</td><td>1.66.1</td><td>Web dashboard framework</td></tr>
+        <tr><td>urllib</td><td>Built-in</td><td>Sending HTTP requests</td></tr>
+        <tr><td>ssl</td><td>Built-in</td><td>Handling HTTPS connections</td></tr>
+        <tr><td>json</td><td>Built-in</td><td>Data handling</td></tr>
+        <tr><td>time</td><td>Built-in</td><td>Scan delay for UX</td></tr>
+      </tbody>
+    </table>
+    <div class="pills">
+      <div class="pill">urllib</div><div class="pill">ssl</div><div class="pill">json</div>
+      <div class="pill">time</div><div class="pill">streamlit</div>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>Security Checks</h2>
+    </div>
+    <table>
+      <thead><tr><th>#</th><th>Check</th><th>Category</th><th>Risk</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Strict-Transport-Security</td><td>Transport Security</td><td class="high">HIGH</td></tr>
+        <tr><td>2</td><td>Content-Security-Policy</td><td>Injection Prevention</td><td class="high">HIGH</td></tr>
+        <tr><td>3</td><td>CORS (Access-Control-Allow-Origin)</td><td>Cross-Origin Access</td><td class="high">HIGH</td></tr>
+        <tr><td>4</td><td>HTTPS Redirect</td><td>Transport Security</td><td class="high">HIGH</td></tr>
+        <tr><td>5</td><td>X-Frame-Options</td><td>Clickjacking</td><td class="medium">MEDIUM</td></tr>
+        <tr><td>6</td><td>X-Content-Type-Options</td><td>MIME Sniffing</td><td class="medium">MEDIUM</td></tr>
+        <tr><td>7</td><td>Cookie Security Flags</td><td>Session Security</td><td class="medium">MEDIUM</td></tr>
+        <tr><td>8</td><td>Referrer-Policy</td><td>Information Disclosure</td><td class="low">LOW</td></tr>
+        <tr><td>9</td><td>Permissions-Policy</td><td>Feature Abuse</td><td class="low">LOW</td></tr>
+        <tr><td>10</td><td>X-XSS-Protection</td><td>XSS (legacy)</td><td class="low">LOW</td></tr>
+        <tr><td>11</td><td>Server Info Leak</td><td>Info Disclosure</td><td class="low">LOW</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>How the Detection Logic Works</h2>
+    </div>
+    <p><strong style="color:#e6edf3">Header Check</strong> — Present = PASS, Missing = FAIL:</p>
+    <pre>value = raw_headers.get(header_name.lower(), "")
+if value:
+    status = "PASS"
+else:
+    status = "FAIL"</pre>
+
+    <p><strong style="color:#e6edf3">CORS Check</strong> — Wildcard origin = dangerous:</p>
+    <pre>acao = headers.get("access-control-allow-origin", "")
+if acao == "*":
+    return "FAIL", "Open CORS — any origin allowed"</pre>
+
+    <p><strong style="color:#e6edf3">Cookie Check</strong> — Must have Secure + HttpOnly flags:</p>
+    <pre>if "secure" not in set_cookie.lower():
+    issues.append("missing Secure flag")
+if "httponly" not in set_cookie.lower():
+    issues.append("missing HttpOnly flag")</pre>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>Scoring System</h2>
+    </div>
+    <table>
+      <thead><tr><th>Result</th><th>Points</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>✅ PASS</td><td style="color:#3fb950;font-weight:700">2 pts</td><td>Header present and correctly configured</td></tr>
+        <tr><td>⚠️ WARN</td><td style="color:#d29922;font-weight:700">1 pt</td><td>Present but exposes minor information</td></tr>
+        <tr><td>❌ FAIL</td><td style="color:#f85149;font-weight:700">0 pts</td><td>Header missing — security risk</td></tr>
+        <tr><td>ℹ️ INFO</td><td style="color:#58a6ff;font-weight:700">0 pts</td><td>Neutral — not applicable for this site</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px"><strong style="color:#e6edf3">Formula:</strong> Score = (total points ÷ max points) × 100</p>
+    <div class="score-wrap">
+      <div class="score-label"><span style="color:#3fb950">🟢 Good (80–100)</span><span style="color:#d29922">🟡 Fair (50–79)</span><span style="color:#f85149">🔴 Poor (0–49)</span></div>
+      <div class="score-bar-bg">
+        <div class="score-bar-fill" style="width:73%;background:linear-gradient(90deg,#f85149 0%,#d29922 50%,#3fb950 100%)"></div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>Sample Scan Results (https://example.com)</h2>
+    </div>
+    <div class="check-pass"><span class="check-label" style="color:#3fb950">✅ PASS</span> — Strict-Transport-Security <div class="check-detail">Present: max-age=31536000; includeSubDomains</div></div>
+    <div class="check-fail"><span class="check-label" style="color:#f85149">❌ FAIL</span> — Content-Security-Policy <div class="check-detail">Header is MISSING — site vulnerable to XSS attacks</div></div>
+    <div class="check-fail"><span class="check-label" style="color:#f85149">❌ FAIL</span> — X-Frame-Options <div class="check-label" style="color:#f85149"></div><div class="check-detail">Header is MISSING — Clickjacking possible</div></div>
+    <div class="check-fail"><span class="check-label" style="color:#f85149">❌ FAIL</span> — X-Content-Type-Options <div class="check-detail">Header is MISSING — MIME sniffing risk</div></div>
+    <div class="check-pass"><span class="check-label" style="color:#3fb950">✅ PASS</span> — HTTPS Redirect <div class="check-detail">HTTP correctly redirects to HTTPS</div></div>
+    <div class="check-warn"><span class="check-label" style="color:#d29922">⚠️ WARN</span> — Server Info Leak <div class="check-detail">Server: ECS (dcb/7F84) — version exposed</div></div>
+    <div class="check-info"><span class="check-label" style="color:#58a6ff">ℹ️ INFO</span> — Cookie Security <div class="check-detail">No Set-Cookie header found on this response</div></div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <h2>Dashboard Components</h2>
+    </div>
+    <table>
+      <thead><tr><th>Component</th><th>Streamlit Element</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>URL Input</td><td><code style="color:#79c0ff">st.text_input()</code></td><td>Enter target website URL</td></tr>
+        <tr><td>Scan Button</td><td><code style="color:#79c0ff">st.button()</code></td><td>Triggers the scan</td></tr>
+        <tr><td>Metric Cards</td><td><code style="color:#79c0ff">st.metric()</code></td><td>Score, Passed, Failed, Warnings, Info</td></tr>
+        <tr><td>Score Bar</td><td>HTML progress bar</td><td>Visual 0–100 score indicator</td></tr>
+        <tr><td>Check Results</td><td><code style="color:#79c0ff">st.markdown()</code> + HTML</td><td>Colour-coded box per check</td></tr>
+        <tr><td>Raw Headers</td><td><code style="color:#79c0ff">st.expander()</code></td><td>All response headers visible</td></tr>
+        <tr><td>Recommendations</td><td><code style="color:#79c0ff">st.markdown()</code> + HTML</td><td>Actionable fixes for failed checks</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">9</div>
+      <h2>Limitations</h2>
+    </div>
+    <ul>
+      <li>Only scans HTTP response headers — does not crawl page content</li>
+      <li>Cannot scan sites that require login or authentication</li>
+      <li>HTTPS redirect check may not work on all server configurations</li>
+      <li>Results reflect only one HTTP request — real audits need multiple scans</li>
+      <li>Not connected to any threat intelligence database</li>
+    </ul>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <h2>Future Improvements</h2>
+    </div>
+    <div class="future-item">Export scan results as a PDF or CSV report</div>
+    <div class="future-item">Scan multiple URLs from a list at once</div>
+    <div class="future-item">Add TLS/SSL certificate expiry check</div>
+    <div class="future-item">Check for open redirects and clickjacking via iframes</div>
+    <div class="future-item">Add scan history saved to a local file</div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <h2>Conclusion</h2>
+    </div>
+    <p>
+      WebGuard demonstrates how a single Python file can perform meaningful web security
+      auditing. The project covers key web security concepts from OWASP — including
+      transport security, injection prevention, information disclosure, and cookie
+      security — while remaining fully understandable to beginners.
+    </p>
+    <p>
+      Every check maps directly to a real-world attack type, making this project both
+      educational and practically relevant to web security careers.
+    </p>
+    <p style="color:#8b949e;font-size:13px;margin-top:12px">
+      ⚠️ For educational purposes only. Only scan websites you own or have permission to test.
+    </p>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num" style="background:#3fb950">📁</div>
+      <h2>Project Folder Structure</h2>
+    </div>
+    <pre>webguard/
+├── app.py                ← Main application (all code here)
+├── requirements.txt      ← streamlit==1.66.1
+├── README.md             ← Setup &amp; usage guide
+└── REPORT.md             ← Full project report</pre>
+    <p style="margin-top:10px;color:#8b949e;font-size:13px">
+      Run with: <code style="color:#79c0ff">python -m streamlit run app.py</code> → open <strong style="color:#58a6ff">http://localhost:8501</strong>
+    </p>
+  </div>
+
+  <div class="footer">
+    <p>WebGuard v1.0  ·  Built with Python &amp; Streamlit  ·  For educational purposes only</p>
+    <p style="margin-top:4px">Made with IBM Bob</p>
+  </div>
+
+</div>
+</body>
+</html>
